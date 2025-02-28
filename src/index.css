@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Sono:wght@200..800&display=swap');
+@import "tailwindcss";
+@theme{
+  --font-primary: "Josefin Sans", "serif";
+  --font-exo: "Exo 2", serif;
+  --font-pt: "PT Sans", serif
+}
+
+#scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  #scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #FE725E, #385A66);
+  border-radius: 5px;
+  }
+  

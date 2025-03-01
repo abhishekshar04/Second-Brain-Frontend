@@ -5,7 +5,7 @@ export const AddContent = () => {
     const [description, setDescription] = useState<string>('');
     const [link, setLink] = useState<string>('');
     const [tags, setTags] = useState<string[]>([]);  // ✅ Changed to array
-
+    
     async function addContentHandler(e: React.FormEvent) {
         e.preventDefault();
         const response = await axios.post(
@@ -35,6 +35,9 @@ export const AddContent = () => {
             }
             e.currentTarget.value = ""; // Clear input after adding
         }
+    }
+    function reloader() {
+        window.location.reload();
     }
 
     function removeTag(tagToRemove: string) {
@@ -80,7 +83,7 @@ export const AddContent = () => {
                 </div>
             </div>
 
-            <button type="submit" className="w-full bg-[#FF735C] text-white py-2 rounded-lg font-semibold cursor-pointer hover:bg-red-500 transition duration-200">
+            <button onClick={reloader} type="submit" className="w-full bg-[#FF735C] text-white py-2 rounded-lg font-semibold cursor-pointer hover:bg-red-500 transition duration-200">
                 Submit
             </button>
         </form>

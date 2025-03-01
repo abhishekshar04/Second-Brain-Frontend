@@ -6,6 +6,13 @@
   --font-pt: "PT Sans", serif
 }
 
+#content::-webkit-scrollbar {
+  width: 8px;
+}
+#content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+}
 #scrollbar::-webkit-scrollbar {
     width: 8px;
   }

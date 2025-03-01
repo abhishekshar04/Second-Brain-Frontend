@@ -6,7 +6,7 @@ export const SideBar = () => {
         window.location.href = '/';
     }
     return (
-        <div className="flex min-w-[15%] flex-col">
+        <div className="flex min-w-[15%] font-primary flex-col">
         <div className="bg-[#375762] text-white">
             <CloseDashboard/>
         </div>

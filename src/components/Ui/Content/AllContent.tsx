@@ -1,8 +1,8 @@
 import React, {  useEffect, useState } from "react";
 import axios from "axios";
 import { AddContent } from "./AddContent";
-import { atom, RecoilRoot } from "recoil";
-
+import { atom } from "recoil";
+import { FaTrash } from "react-icons/fa";
 interface Tag {
   _id: string;
   name: string;
@@ -27,7 +27,6 @@ const ContentList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [showAddContent, setShowAddContent] = useState<boolean>(false); // ✅ Popup state
-
   useEffect(() => {
     axios
       .get("http://localhost:8888/api/v1/content", {
@@ -40,7 +39,6 @@ const ContentList: React.FC = () => {
         setTags(response.data["tags"]);
         console.log(response);
         console.log(response.data["tags"]);
-
         setLoading(false);
       })
       .catch((err) => {
@@ -50,19 +48,36 @@ const ContentList: React.FC = () => {
       });
   }, []);
 
+  function deleteContent(id: string) {
+    axios
+      .delete("http://localhost:8888/api/v1/content", {
+        data: { id }, // Sending ID in the body
+        headers: {
+          token: localStorage.getItem("token") || "",
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setContents((prevContents) => prevContents.filter((content) => content._id !== id));
+        console.log("Content deleted:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error deleting content:", error);
+      });
+  }
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <RecoilRoot>
-        <div id="scrollbar" className="p-4 overflow-auto">
+        <div id="content" className="p-4 font-primary overflow-auto">
       {/* Add Content Button */}
       <button
-        onClick={() => setShowAddContent(true)}
-        className="mb-4 bg-[#FC715C] cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-red-500"
-      >
-        Add Content
-      </button>
+          onClick={() => setShowAddContent(true)}
+          className="mb-4 absolute right-10 top-12 bg-[#FC715C] cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-red-500 shadow-lg"
+        >
+          Add Content
+        </button>
 
       {/* ✅ AddContent Popup */}
       {showAddContent && (
@@ -80,10 +95,18 @@ const ContentList: React.FC = () => {
       )}
 
       {/* Content List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
+        {contents.length === 0 && 
+        <p className="flex flex-col items-center justify-center relative w-full">
+          <div>No content available.</div> 
+          <div>Click "Add Content" Button to Add Content.</div>
+        </p>}
         {contents.map((content) => (
-          <div key={content._id} className="p-4 border rounded-lg shadow">
+          <div key={content._id} className="p-4 border rounded-lg shadow-4xl">
+            <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold">{content.title}</h3>
+            <button onClick={() => deleteContent(content._id)} className="bg-gray-200 text-sm px-2 py-1 text-[#375762] rounded cursor-pointer"><FaTrash /></button>
+            </div>
             <p className="text-sm text-gray-500">Type: {content.type || "N/A"}</p>
             {content.link && (
               <a
@@ -100,7 +123,7 @@ const ContentList: React.FC = () => {
               <div className="flex flex-wrap gap-1 mt-1">
                 {tags.map((tag) => (
                   <span
-                    key={tag?._id}
+                    key={tag}
                     className="bg-gray-200 text-sm px-2 py-1 rounded"
                   >
                     {tag}
@@ -115,7 +138,6 @@ const ContentList: React.FC = () => {
         ))}
       </div>
     </div>
-    </RecoilRoot>
     
   );
 };

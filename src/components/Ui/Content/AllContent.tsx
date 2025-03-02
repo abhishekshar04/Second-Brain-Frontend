@@ -5,7 +5,7 @@ import { atom } from "recoil";
 import { FaTrash } from "react-icons/fa";
 interface Tag {
   _id: string;
-  name: string;
+  title: string;
 }
 
 interface Content {
@@ -37,8 +37,6 @@ const ContentList: React.FC = () => {
       .then((response) => {
         setContents(response.data["content"]);
         setTags(response.data["tags"]);
-        console.log(response);
-        console.log(response.data["tags"]);
         setLoading(false);
       })
       .catch((err) => {
@@ -123,10 +121,10 @@ const ContentList: React.FC = () => {
               <div className="flex flex-wrap gap-1 mt-1">
                 {tags.map((tag) => (
                   <span
-                    key={tag}
+                    key={tag._id}
                     className="bg-gray-200 text-sm px-2 py-1 rounded"
                   >
-                    {tag}
+                    {tag.title}
                   </span>
                 ))}
               </div>
